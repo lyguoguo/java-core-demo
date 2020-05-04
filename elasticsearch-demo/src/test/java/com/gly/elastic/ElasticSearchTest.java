@@ -22,7 +22,7 @@ public class ElasticSearchTest extends ElasticsearchDemoApplicationTests{
     public void elasticTest(){
         try {
             // 获取请求对象
-            GetRequest getRequest = new GetRequest("index", "_type", "id");
+            GetRequest getRequest = new GetRequest("vehicle_rvs_req_v1", "rvs_req", "NEU57949080104182");
             // 获取文档信息
             GetResponse getResponse = restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);
             // 将 JSON 转换成对象
