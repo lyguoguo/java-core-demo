@@ -1,19 +1,19 @@
 package com.gly.elastic.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 索引操作
@@ -27,68 +27,54 @@ public class IndexService {
     /**
      * 创建索引
      */
-    public void createIndex() {
+
+    public boolean indexCreate() {
         try {
-            // 创建 Mapping
-            XContentBuilder mapping = XContentFactory.jsonBuilder()
-                    .startObject()
-                    .field("dynamic", true)
-                    .startObject("properties")
-                    .startObject("name")
-                    .field("type","text")
-                    .startObject("fields")
-                    .startObject("keyword")
-                    .field("type","keyword")
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .startObject("address")
-                    .field("type","text")
-                    .startObject("fields")
-                    .startObject("keyword")
-                    .field("type","keyword")
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .startObject("remark")
-                    .field("type","text")
-                    .startObject("fields")
-                    .startObject("keyword")
-                    .field("type","keyword")
-                    .endObject()
-                    .endObject()
-                    .endObject()
-                    .startObject("age")
-                    .field("type","integer")
-                    .endObject()
-                    .startObject("salary")
-                    .field("type","float")
-                    .endObject()
-                    .startObject("birthDate")
-                    .field("type","date")
-                    .field("format", "yyyy-MM-dd")
-                    .endObject()
-                    .startObject("createTime")
-                    .field("type","date")
-                    .endObject()
-                    .endObject()
-                    .endObject();
-            // 创建索引配置信息，配置
-            Settings settings = Settings.builder()
-                    .put("index.number_of_shards", 1)
-                    .put("index.number_of_replicas", 0)
-                    .build();
-            // 新建创建索引请求对象，然后设置索引类型（ES 7.0 将不存在索引类型）和 mapping 与 index 配置
-            CreateIndexRequest request = new CreateIndexRequest("mydlq-user", settings);
-            request.mapping("doc", mapping);
-            // RestHighLevelClient 执行创建索引
-            CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request, RequestOptions.DEFAULT);
+            CreateIndexRequest request = new CreateIndexRequest("twitter4");
+            request.settings(Settings.builder()
+                    .put("index.number_of_shards", 3)
+                    .put("index.number_of_replicas", 2)
+            );
+            Map<String, Object> message = new HashMap<>();
+            message.put("type", "text");
+            Map<String, Object> properties = new HashMap<>();
+            properties.put("message", message);
+            properties.put("name",message);
+            Map<String, Object> mapping = new HashMap<>();
+            mapping.put("properties", properties);
+            request.mapping(mapping);
+
+//            XContentBuilder builder = XContentFactory.jsonBuilder();
+//            builder.startObject();
+//            {
+//                builder.startObject("properties");
+//                {
+//                    builder.startObject("message");
+//                    {
+//                        builder.field("type", "text");
+//                    }
+//                    builder.endObject();
+//                    builder.startObject("age");
+//                    {
+//                       builder.field("type","long");
+//                    }
+//                    builder.endObject();
+//                }
+//                builder.endObject();
+//            }
+//            builder.endObject();
+//            request.mapping(builder);
+
+            CreateIndexResponse createIndexResponse = restHighLevelClient.indices().create(request,RequestOptions.DEFAULT);
             // 判断是否创建成功
             boolean isCreated = createIndexResponse.isAcknowledged();
             log.info("是否创建成功：{}", isCreated);
+            return true;
         } catch (IOException e) {
-            log.error("", e);
+            e.printStackTrace();
+            return false;
         }
+
     }
 
     /**
@@ -97,7 +83,7 @@ public class IndexService {
     public void deleteIndex() {
         try {
             // 新建删除索引请求对象
-            DeleteIndexRequest request = new DeleteIndexRequest("mydlq-user");
+            DeleteIndexRequest request = new DeleteIndexRequest("twitter");
             // 执行删除索引
             AcknowledgedResponse acknowledgedResponse = restHighLevelClient.indices().delete(request, RequestOptions.DEFAULT);
             // 判断是否删除成功

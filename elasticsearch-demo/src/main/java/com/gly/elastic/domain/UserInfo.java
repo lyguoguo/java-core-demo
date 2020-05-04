@@ -1,12 +1,12 @@
 package com.gly.elastic.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.util.Date;
 
-@Getter
-@Setter
+@Data
+@Accessors(chain = true)
 public class UserInfo {
 
     private String name;

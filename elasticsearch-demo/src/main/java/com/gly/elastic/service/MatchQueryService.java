@@ -51,7 +51,7 @@ public class MatchQueryService {
             // 执行查询，然后处理响应结果
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             // 根据状态和数据条数验证是否返回了数据
-            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().totalHits > 0) {
+            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().getTotalHits().value > 0) {
                 SearchHits hits = searchResponse.getHits();
                 for (SearchHit hit : hits) {
                     // 将 JSON 转换成对象
@@ -80,7 +80,7 @@ public class MatchQueryService {
             // 执行查询，然后处理响应结果
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             // 根据状态和数据条数验证是否返回了数据
-            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().totalHits > 0) {
+            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().getTotalHits().value > 0) {
                 SearchHits hits = searchResponse.getHits();
                 for (SearchHit hit : hits) {
                     // 将 JSON 转换成对象
@@ -109,7 +109,7 @@ public class MatchQueryService {
             // 执行查询，然后处理响应结果
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             // 根据状态和数据条数验证是否返回了数据
-            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().totalHits > 0) {
+            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().getTotalHits().value > 0) {
                 SearchHits hits = searchResponse.getHits();
                 for (SearchHit hit : hits) {
                     // 将 JSON 转换成对象
@@ -138,7 +138,7 @@ public class MatchQueryService {
             // 执行查询，然后处理响应结果
             SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
             // 根据状态和数据条数验证是否返回了数据
-            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().totalHits > 0) {
+            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().getTotalHits().value > 0) {
                 SearchHits hits = searchResponse.getHits();
                 for (SearchHit hit : hits) {
                     // 将 JSON 转换成对象
