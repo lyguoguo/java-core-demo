@@ -10,7 +10,7 @@ package com.gly.leetcode;
  */
 public class CommonPrefix {
     public static void main(String[] args) {
-        String[] strs = {"a"};
+        String[] strs = {"aa","aab","aac"};
         System.out.println(longestCommonPrefix(strs));
     }
 
